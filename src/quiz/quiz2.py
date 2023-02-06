@@ -22,14 +22,14 @@ transitions = {
     '`Hello, how can I help you?`': {
         '<{appointment, book}, haircut>': {
             '`Sure. What date and time are you looking for?`': {
-                '[tuesday, [!2 pm]]': {
+                '<{tuesday, tue}, [!2 pm]>': {
                     '`Your appointment is set. See you!`': 'end'
                 },
-                '[monday, [!{2 pm, 10 am, 1 pm}]]': {
+                '<{monday, mon}, [!{2 pm, 10 am, 1 pm}]>': {
                     '`Your appointment is set. See you!`': 'end'
                 },
-                '{[!tuesday, -2 pm, {am, pm}], [!monday, -{2 pm, 10 am, 1 pm}, {am, pm}], [{wednesday, thursday, '
-                'friday, saturday}, {am, pm}]}': {
+                '{<[!{tuesday, tue}, -2 pm, {am, pm}]>, <[!{monday, mon}, -{2 pm, 10 am, 1 pm}, {am, pm}]>, '
+                '<{wednesday, thursday, friday, saturday, wed, thur, fri, sat}, {am, pm}>}': {
                     '`Sorry, that slot is not available for a haircut`': {
                         'error': {
                             '`Goodbye`': 'end'
@@ -41,16 +41,16 @@ transitions = {
                 }
             }
         },
-        '<{appointment, book}, perm>': {
+        '<{appointment, book}, {perm, perms}>': {
             '`Sure. What date and time are you looking for?`': {
-                '[friday, [!{10 am, 11 am, 1 pm, 2 pm}]]': {
+                '[{friday, fri}, [!{10 am, 11 am, 1 pm, 2 pm}]]': {
                     '`Your appointment is set. See you!`': 'end'
                 },
-                '[saturday, [!{2 pm, 10 am}]]': {
+                '[{saturday, sat}, [!{2 pm, 10 am}]]': {
                     '`Your appointment is set. See you!`': 'end'
                 },
-                '{[!friday, -{10 am, 11 am, 1 pm, 2 pm}, {am, pm}], [!saturday, -{2 pm, 10 am}, {am, pm}], '
-                '[{monday, tuesday, wednesday, thursday}, {am, pm}]}': {
+                '{[!{friday, fri}, -{10 am, 11 am, 1 pm, 2 pm}, {am, pm}], [!{saturday, sat}, -{2 pm, 10 am}, {am, '
+                'pm}], [{monday, tuesday, wednesday, thursday, mon, tue, wed, thur}, {am, pm}]}': {
                     '`Sorry, that slot is not available for a perm`': {
                         'error': {
                             '`Goodbye`': 'end'
@@ -64,14 +64,14 @@ transitions = {
         },
         '<{appointment, book}, hair coloring>': {
             '`Sure. What date and time are you looking for?`': {
-                '[wednesday, [!{10 am, 11 am, 1 pm}]]': {
+                '[{wednesday, wed}, [!{10 am, 11 am, 1 pm}]]': {
                     '`Your appointment is set. See you!`': 'end'
                 },
-                '[thursday, [!{11 am, 10 am}]]': {
+                '[{thursday, thur}, [!{11 am, 10 am}]]': {
                     '`Your appointment is set. See you!`': 'end'
                 },
-                '{[!wednesday, -{10 am, 11 am, 1 pm}, {am, pm}], [!thursday, -{11 am, 10 am}, {am, pm}], '
-                '[{monday, tuesday, friday, saturday}, {am, pm}]}': {
+                '{[!{wednesday, wed}, -{10 am, 11 am, 1 pm}, {am, pm}], [!{thur, thursday}, -{11 am, 10 am}, {am, '
+                'pm}], [{monday, tuesday, friday, saturday, mon, tue, fri, sat}, {am, pm}]}': {
                     '`Sorry, that slot is not available for a hair coloring`': {
                         'error': {
                             '`Goodbye`': 'end'
@@ -83,7 +83,7 @@ transitions = {
                 }
             }
         },
-        '<[!{book, appointment}, -{hair coloring, perm, haircut}]>': {
+        '<[!{book, appointment}, -{hair coloring, perm, haircut, perms}]>': {
             '`Sorry, we do not provide that service`': {
                 'error': {
                     '`Goodbye`': 'end'
