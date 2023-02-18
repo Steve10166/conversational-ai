@@ -1,0 +1,13 @@
+{
+    "ontology": {
+        "marvel": ["captain america", "hulk", "thor", "iron man", "spiderman", "black widow", "strange", "deadpool"],
+        "dc": ["superman", "batman", "wonder woman", "aquaman", "the flash", "the joker", "batman"],
+        "action": ["Impossible", "godzilla vs. kong", "laura croft", "indiana jones", "die hard"],
+        "teendrama": ["hunger games", "giver", "divergent", "moving maze"],
+        "disney": ["snow white", "encanto", "mulan", "frozen"],
+        "scifi": ["interstellar", "tenet", "inception", "gravity"],
+        "thriller": ["smile", "unfriended"],
+        "romance": ["titanic", "casablanca"],
+        "princess": ["elsa", "ariel", "jasmine", "belle", "cinderella"]
+    }
+}
