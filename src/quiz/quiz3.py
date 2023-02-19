@@ -21,7 +21,7 @@ import re
 
 class MacroGetName(Macro):
     def run(self, ngrams: Ngrams, vars: Dict[str, Any], args: List[Any]):
-        r = re.compile(r'(mr|mrs|ms|dr)?([a-z]+)(\s[a-z]+)?$')
+        r = re.compile(r"(mr|mrs|ms|dr)?([a-z']+)(\s[a-z']+)?$")
         m = r.search(ngrams.text())
         if m is None: return False
 
@@ -47,7 +47,7 @@ transitions = {
         '`Hello, may I have your full name please?`': {
             '#GET_NAME': {
                 '`It\'s nice to meet you,`$FIRSTNAME`. Do you feel like sharing a movie that you recently watched?`': {
-                    '[{no, not}]': {
+                    'no': {
                         '`OK then.`': 'end'
                     },
                     '[$FAVORITE_MOVIE=#ONT(marvel)]': {
@@ -65,30 +65,36 @@ transitions = {
                                         '`I understand, goodbye`': 'end'
                                     }
                                 }
+                            },
+                            'error': {
+                                '`Sorry, I don\'t understand you.`': 'end'
                             }
                         }
                     },
                     '[$FAVORITE_MOVIE=#ONT(dc)]': {
                         '$FAVORITE_MOVIE `is one of my most favorite series in the DC universe! Do you like '
                         'protagonists or antagonists in the DC universe?`': {
-                            '[protagonist]': {
+                            '[protagonists]': {
                                 '`Great! Why do you like them so much?`': {
                                     'error': {
                                         '`Thank you for sharing!`': 'end'
                                     }
                                 }
                             },
-                            '[antagonist]': {
+                            '[antagonists]': {
                                 '`Antagonists in the DC universe do have a charm to them. Why do you like them?`': {
                                     'error': {
                                         '`Thank you for sharing! goodbye`': 'end'
                                     }
                                 }
+                            },
+                            'error': {
+                                '`Sorry, I don\'t understand you.`': 'end'
                             }
                         }
                     },
                     '[$FAVORITE_MOVIE=#ONT(action)]': {
-                        '`Action movies excites me so much! Especially`$FAVORITE_MOVIE `Do you like action movies?`': {
+                        '`Action movies excites me so much! Especially`$FAVORITE_MOVIE `. Do you like action movies?`': {
                             '[{yes, of course}]': {
                                 '`Great! Why do you like them?`': {
                                     'error': {
@@ -102,6 +108,9 @@ transitions = {
                                         '`Thank you for sharing, I will definitely check them out sometime.`': 'end'
                                     }
                                 }
+                            },
+                            'error': {
+                                '`Sorry, I don\'t understand you.`': 'end'
                             }
                         }
                     },
@@ -121,14 +130,17 @@ transitions = {
                                         '`That is exactly what I think.`': 'end'
                                     }
                                 }
+                            },
+                            'error': {
+                                '`Sorry, I don\'t understand you.`': 'end'
                             }
                         }
                     },
                     '[$FAVORITE_MOVIE=#ONT(disney)]': {
-                        '`Disney movies like`$FAVORITE_MOVIE`really have a magic to them, don\'t they? Don\'t you think so?`': {
+                        '`Disney movies like`$FAVORITE_MOVIE`really have a magic to them. Don\'t you think so?`': {
                             '[{yes, of course}]': {
                                 '`Great! Which princess do you like?`': {
-                                    '[$FAVORITE_PRINCESS=#ONT(princess)]': {
+                                    '[$FAVORITE_PRINCESS=#ONT(prin)]': {
                                         '`I absolutely love`$FAVORITE_PRINCESS': 'end'
                                     },
                                     'error': {
@@ -146,6 +158,9 @@ transitions = {
                                         '`I understand, goodbye`': 'end'
                                     }
                                 }
+                            },
+                            'error': {
+                                '`Sorry, I don\'t understand you.`': 'end'
                             }
                         }
                     },
@@ -165,6 +180,9 @@ transitions = {
                                         '`OK, I will watch it later.`': 'end'
                                     }
                                 }
+                            },
+                            'error': {
+                                '`Sorry, I don\'t understand you.`': 'end'
                             }
                         }
                     },
@@ -184,6 +202,9 @@ transitions = {
                                         '`That makes sense, maybe I will try it sometime in the future.`': 'end'
                                     }
                                 }
+                            },
+                            'error': {
+                                '`Sorry, I don\'t understand you.`': 'end'
                             }
                         }
                     },
@@ -191,7 +212,7 @@ transitions = {
                         '`Romantic movies like`$FAVORITE_MOVIE`are sad and enjoyable at the same time, I just could '
                         'not give up watching them. Did you enjoy watching`$FAVORITE_MOVIE`?`': {
                             '[{yes, of course}]': {
-                                '`That is awesome, what do you think of the couples?`': {
+                                '`That is awesome, what do you think of the couple?`': {
                                     'error': {
                                         '`That is what I think, they are so cute!`': 'end'
                                     }
@@ -203,6 +224,9 @@ transitions = {
                                         '`I am sorry you have to sit through the entire movie...`': 'end'
                                     }
                                 }
+                            },
+                            'error': {
+                                '`Sorry, I don\'t understand you.`': 'end'
                             }
                         }
                     },

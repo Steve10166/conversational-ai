@@ -8,6 +8,6 @@
         "scifi": ["interstellar", "tenet", "inception", "gravity"],
         "thriller": ["smile", "unfriended"],
         "romance": ["titanic", "casablanca"],
-        "princess": ["elsa", "ariel", "jasmine", "belle", "cinderella"]
+        "prin": ["elsa", "ariel", "jasmine", "belle", "cinderella"]
     }
 }
