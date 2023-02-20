@@ -255,7 +255,7 @@ macros = {
 
 df = DialogueFlow('start', end_state='end')
 df.load_transitions(transitions)
-df.knowledge_base().load_json_file('/Users/steveli/PycharmProjects/conversational-ai/resources/ontology_quiz3.json')
+df.knowledge_base().load_json_file('resources/ontology_quiz3.json')
 df.add_macros(macros)
 
 if __name__ == '__main__':
