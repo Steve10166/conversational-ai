@@ -3,7 +3,7 @@ from emora_stdm import DialogueFlow
 transitions = {
     'state': 'start',
     '`Hello. How are you?`': {
-        '[{good, fantastic}]': {
+        '-[{good, fantastic}]': {
             '`Glad to hear that you are doing well :)`': {
                 'error': {
                     '`See you later!`': 'end'
