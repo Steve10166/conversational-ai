@@ -24,6 +24,37 @@ import re
 PATH_API_KEY = 'resources/openai_api.txt'
 openai.api_key_path = PATH_API_KEY
 
+class MacroCheck(Macro):
+    def run(self, ngrams: Ngrams, vars: Dict[str, Any], args: List[Any]):
+        model = 'gpt-3.5-turbo'
+        content = 'You are now a booking assistant for a barbershop, the user is now booking for one of our services, ' \
+                  'including haircut, hair coloring and perms, if the user wants to book one of the services, ' \
+                  'return CUT for haircut, return DYE for hair coloring and return PERM for perms, return NO if the ' \
+                  'user want a hair service but we dont provide that service and return UN if the user is talking ' \
+                  'gibberish, return only the uppercase letter codes:'
+        content = content + ngrams.raw_text()
+        response = openai.ChatCompletion.create(
+            model=model,
+            messages=[{'role': 'user', 'content': content}]
+        )
+        output = response['choices'][0]['message']['content'].strip()
+        vars['CUT'] = False
+        vars['PERM'] = False
+        vars['DYE'] = False
+        vars['NO'] = False
+        vars['NOUNDERSTAND'] = False
+
+        if output == 'CUT':
+            vars['CUT'] = True
+        elif output == 'PERM':
+            vars['PERM'] = True
+        elif output == 'DYE':
+            vars['DYE'] = True
+        elif output == 'NO':
+            vars['NO'] = True
+        elif output == 'UN':
+            vars['NOUNDERSTAND'] = True
+        return True
 
 class MacroHair(Macro):
     def run(self, ngrams: Ngrams, vars: Dict[str, Any], args: List[Any]):
@@ -95,32 +126,27 @@ class MacroPerm(Macro):
 transitions = {
     'state': 'start',
     '`Hello, how can I help you?`': {
-        '[{haircut, <cut, hair>}]': {
-            '`Sure. What date and time are you looking for?`': {
+        '#CHECK': {
+            '#IF($CUT)`Sure. What date and time are you looking for?`': {
                 '#HAIRCUT': {
                     '#IF($CHECK)`Your appointment is set. See you!`': 'end',
                     '#IF($ANTICHECK)`Sorry, that time is not available for a haircut`': 'end'
                 }
-            }
-        },
-        '[{<hair, colored>, <hair, coloring>, <hair, color>, <hair, dye>}]': {
-            '`Sure. What date and time are you looking for?`': {
+            },
+            '#IF($DYE)`Sure. What date and time are you looking for?`': {
                 '#HAIRDYE': {
                     '#IF($CHECK)`Your appointment is set. See you!`': 'end',
                     '#IF($ANTICHECK)`Sorry, that time is not available for a hair coloring`': 'end'
                 }
-            }
-        },
-        '[{perm, perms}]': {
-            '`Sure. What date and time are you looking for?`': {
+            },
+            '#IF($PERM)`Sure. What date and time are you looking for?`': {
                 '#PERM': {
                     '#IF($CHECK)`Your appointment is set. See you!`': 'end',
                     '#IF($ANTICHECK)`Sorry, that time is not available for a perm`': 'end'
                 }
-            }
-        },
-        'error': {
-            '`Sorry, we don\'t provide that service. `': 'start'
+            },
+            '#IF($NO)`Sorry, we don\'t provide that service. `': 'start',
+            '#IF($NOUNDERSTAND)`Sorry, I don\'t understand you.`': 'start'
         }
     }
 }
@@ -128,7 +154,8 @@ transitions = {
 macros = {
     'HAIRCUT': MacroHair(),
     'HAIRDYE': MacroColor(),
-    'PERM': MacroPerm()
+    'PERM': MacroPerm(),
+    'CHECK': MacroCheck()
 }
 
 df = DialogueFlow('start', end_state='end')
