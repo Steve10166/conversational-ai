@@ -18,8 +18,6 @@ __author__ = 'Steve LI'
 from emora_stdm import DialogueFlow, Ngrams, Macro
 from typing import Dict, Any, List
 import openai
-import json
-import re
 
 PATH_API_KEY = 'resources/openai_api.txt'
 openai.api_key_path = PATH_API_KEY
@@ -31,8 +29,8 @@ class MacroCheck(Macro):
                   'including haircut, hair coloring and perms, if the user wants to book one of the services, ' \
                   'return CUT for haircut, return DYE for hair coloring and return PERM for perms, return NO if the ' \
                   'user want a hair service but we dont provide that service and return UN if the user is talking ' \
-                  'gibberish, return only the uppercase letter codes:'
-        content = content + ngrams.raw_text()
+                  'gibberish, return only the uppercase letter codes. The user\'s response is as follows:\''
+        content = content + ngrams.raw_text() + '\''
         response = openai.ChatCompletion.create(
             model=model,
             messages=[{'role': 'user', 'content': content}]
@@ -62,8 +60,8 @@ class MacroHair(Macro):
         content = 'The user wants to make appointment for a haircut, I asked the user \'What date and time are you ' \
                   'looking for?\' Haircut is only available on Monday 10 AM, 1 PM, 2 PM and Tuesday at 2 PM, ' \
                   'based on the following response from user, return True if the user a valid time, False if ' \
-                  'otherwise, (the user may type extra words other than time, please just extract time):'
-        content = content + ngrams.raw_text()
+                  'otherwise, (the user may type extra words other than time, please just extract time). The user\'s response is as follows:\':'
+        content = content + ngrams.raw_text() + '\''
         response = openai.ChatCompletion.create(
             model=model,
             messages=[{'role': 'user', 'content': content}]
@@ -84,8 +82,8 @@ class MacroColor(Macro):
         content = 'The user wants to make appointment for a hair coloring, I asked the user \'What date and time are you ' \
                   'looking for?\' hair coloring is only available on Wednesday 10 AM, 11 AM, 1 PM and Thursday at 10 AM and 11 AM, ' \
                   'based on the following response from user, return True if the user a valid time, False if ' \
-                  'otherwise, (the user may type extra words other than time, please just extract time):'
-        content = content + ngrams.raw_text()
+                  'otherwise, (the user may type extra words other than time, please just extract time). The user\'s response is as follows:\':'
+        content = content + ngrams.raw_text() + '\''
         response = openai.ChatCompletion.create(
             model=model,
             messages=[{'role': 'user', 'content': content}]
@@ -106,8 +104,8 @@ class MacroPerm(Macro):
         content = 'The user wants to make appointment for a perm, I asked the user \'What date and time are you ' \
                   'looking for?\' Perm is only available on Friday 10 AM, 11 AM, 1 PM, 2 PM and Saturday at 10 AM, 2 PM, ' \
                   'based on the following response from user, return True if the user a valid time, False if ' \
-                  'otherwise, (the user may type extra words other than time, please just extract time):'
-        content = content + ngrams.raw_text()
+                  'otherwise, (the user may type extra words other than time, please just extract time). The user\'s response is as follows:\':'
+        content = content + ngrams.raw_text() + '\''
         response = openai.ChatCompletion.create(
             model=model,
             messages=[{'role': 'user', 'content': content}]
